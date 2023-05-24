@@ -1,0 +1,33 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Board {
+  number: Int!
+  writer: String!
+  title: String!
+  contents: String!
+}
+
+type Query {
+  fetchBoards: [Board!]!
+  fetchBoard(boardNumber: Float!): Board!
+}
+
+type Mutation {
+  createBoard(createBoardInput: CreateBoardInput!): Board!
+  updateBoard(updateBoardInput: UpdataBoardInput!, boardNumber: Float!): Board!
+  deleteBoard(boardNumber: Float!): Boolean!
+}
+
+input CreateBoardInput {
+  writer: String!
+  title: String!
+  contents: String!
+}
+
+input UpdataBoardInput {
+  writer: String
+  title: String
+  contents: String
+}
