@@ -9,8 +9,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@ObjectType()
 @Entity()
+@ObjectType()
 export class Product {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
