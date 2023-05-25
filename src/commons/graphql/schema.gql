@@ -9,15 +9,40 @@ type Board {
   contents: String!
 }
 
+type ProductCategory {
+  id: String!
+  name: String!
+}
+
+type User {
+  id: String!
+  name: String!
+  email: String!
+}
+
+type Product {
+  id: String!
+  name: String!
+  description: String!
+  isSoldOut: Boolean!
+  productCategory: ProductCategory!
+  user: User!
+}
+
 type Query {
   fetchBoards: [Board!]!
   fetchBoard(boardNumber: Float!): Board!
+  fetchProducts: [Product!]!
+  fetchProduct(productId: String!): Product!
+  fetchProductCategories: [ProductCategory!]!
 }
 
 type Mutation {
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdataBoardInput!, boardNumber: Float!): Board!
   deleteBoard(boardNumber: Float!): Boolean!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  createProductCategory(name: String!): ProductCategory!
 }
 
 input CreateBoardInput {
@@ -30,4 +55,11 @@ input UpdataBoardInput {
   writer: String
   title: String
   contents: String
+}
+
+input CreateProductInput {
+  name: String!
+  description: String!
+  price: Int!
+  productCategoryId: String!
 }
