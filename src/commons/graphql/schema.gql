@@ -16,8 +16,9 @@ type ProductCategory {
 
 type User {
   id: String!
-  name: String!
   email: String!
+  name: String!
+  age: Int!
 }
 
 type Product {
@@ -42,6 +43,7 @@ type Mutation {
   updateBoard(updateBoardInput: UpdataBoardInput!, boardNumber: Float!): Board!
   deleteBoard(boardNumber: Float!): Boolean!
   createProduct(createProductInput: CreateProductInput!): Product!
+  createUser(email: String!, password: String!, name: String!, age: Int!): User!
   createProductCategory(name: String!): ProductCategory!
 }
 

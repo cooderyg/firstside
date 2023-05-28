@@ -9,12 +9,15 @@ import { ProductsModule } from './apis/products/products.module';
 import { ProductCategoriesModule } from './apis/productsCategories/productsCategories.module';
 import { Product } from './apis/products/entities/product.entity';
 import { ProductCategory } from './apis/productsCategories/entities/productCategory.entity';
+import { UsersModule } from './apis/users/users.module';
 
 @Module({
   imports: [
     BoardsModule,
     ProductsModule,
+    UsersModule,
     ProductCategoriesModule,
+
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
