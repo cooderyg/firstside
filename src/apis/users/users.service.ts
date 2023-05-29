@@ -21,7 +21,12 @@ export class UsersService {
     });
   }
 
-  async create({ email, password, name, age }: IUsersServiceCreate) {
+  async create({
+    email,
+    password,
+    name,
+    age,
+  }: IUsersServiceCreate): Promise<User> {
     const user = await this.findOneByEmail({ email });
     if (user) throw new ConflictException('이미 등록된 이메일입니다.');
 

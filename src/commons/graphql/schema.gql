@@ -31,6 +31,7 @@ type Product {
 }
 
 type Query {
+  fetchUser: String!
   fetchBoards: [Board!]!
   fetchBoard(boardNumber: Float!): Board!
   fetchProducts: [Product!]!
@@ -39,11 +40,13 @@ type Query {
 }
 
 type Mutation {
+  login(email: String!, password: String!): String!
+  restoreAccessToken: String!
+  createUser(email: String!, password: String!, name: String!, age: Int!): User!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdataBoardInput!, boardNumber: Float!): Board!
   deleteBoard(boardNumber: Float!): Boolean!
   createProduct(createProductInput: CreateProductInput!): Product!
-  createUser(email: String!, password: String!, name: String!, age: Int!): User!
   createProductCategory(name: String!): ProductCategory!
 }
 

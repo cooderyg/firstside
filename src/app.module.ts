@@ -10,18 +10,20 @@ import { ProductCategoriesModule } from './apis/productsCategories/productsCateg
 import { Product } from './apis/products/entities/product.entity';
 import { ProductCategory } from './apis/productsCategories/entities/productCategory.entity';
 import { UsersModule } from './apis/users/users.module';
+import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     BoardsModule,
     ProductsModule,
     UsersModule,
     ProductCategoriesModule,
-
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
+      context: ({ req, res }) => ({ req, res }),
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',
