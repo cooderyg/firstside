@@ -11,11 +11,13 @@ import { Product } from './apis/products/entities/product.entity';
 import { ProductCategory } from './apis/productsCategories/entities/productCategory.entity';
 import { UsersModule } from './apis/users/users.module';
 import { AuthModule } from './apis/auth/auth.module';
+import { FilesModule } from './apis/files/files.module';
 
 @Module({
   imports: [
     AuthModule,
     BoardsModule,
+    FilesModule,
     ProductsModule,
     UsersModule,
     ProductCategoriesModule,
