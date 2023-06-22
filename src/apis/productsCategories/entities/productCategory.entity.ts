@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Favorite } from 'src/apis/favorites/entities/favorites.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -11,4 +12,8 @@ export class ProductCategory {
   @Column({ unique: true })
   @Field(() => String)
   name: string;
+
+  @OneToMany(() => Favorite, (favorite) => favorite.product)
+  @Field(() => [Favorite])
+  favorites: Favorite[];
 }

@@ -12,11 +12,13 @@ import { ProductCategory } from './apis/productsCategories/entities/productCateg
 import { UsersModule } from './apis/users/users.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { FilesModule } from './apis/files/files.module';
+import { FavoritesModule } from './apis/favorites/favorites.module';
 
 @Module({
   imports: [
     AuthModule,
     BoardsModule,
+    FavoritesModule,
     FilesModule,
     ProductsModule,
     UsersModule,

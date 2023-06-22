@@ -9,16 +9,30 @@ type Board {
   contents: String!
 }
 
-type ProductCategory {
-  id: String!
-  name: String!
-}
-
 type User {
   id: String!
   email: String!
   name: String!
   age: Int!
+  favorites: [Favorite!]!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Favorite {
+  id: String!
+  product: Product!
+  user: User!
+}
+
+type ProductCategory {
+  id: String!
+  name: String!
+  favorites: [Favorite!]!
 }
 
 type Product {
@@ -28,13 +42,16 @@ type Product {
   isSoldOut: Boolean!
   productCategory: ProductCategory!
   user: User!
+  favorites: [Favorite!]!
+  favoriteCount: Int!
+  createdAt: DateTime!
 }
 
 type Query {
   fetchUser: String!
   fetchBoards: [Board!]!
   fetchBoard(boardNumber: Float!): Board!
-  fetchProducts: [Product!]!
+  fetchProducts(page: Float): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductCategories: [ProductCategory!]!
 }
@@ -46,6 +63,7 @@ type Mutation {
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdataBoardInput!, boardNumber: Float!): Board!
   deleteBoard(boardNumber: Float!): Boolean!
+  createFavorite(productId: String!): String!
   uploadFile(files: [Upload!]!): [String!]!
   createProduct(createProductInput: CreateProductInput!): Product!
   createProductCategory(name: String!): ProductCategory!

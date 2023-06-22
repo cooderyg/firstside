@@ -8,8 +8,10 @@ export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
 
   @Query(() => [Product])
-  fetchProducts(): Promise<Product[]> {
-    return this.productsService.findAll();
+  fetchProducts(
+    @Args('page', { nullable: true }) page: number,
+  ): Promise<Product[]> {
+    return this.productsService.findAll({ page });
   }
 
   @Query(() => Product)
