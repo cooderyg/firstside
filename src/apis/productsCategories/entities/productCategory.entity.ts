@@ -12,8 +12,4 @@ export class ProductCategory {
   @Column({ unique: true })
   @Field(() => String)
   name: string;
-
-  @OneToMany(() => Favorite, (favorite) => favorite.product)
-  @Field(() => [Favorite])
-  favorites: Favorite[];
 }

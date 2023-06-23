@@ -1,5 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Favorite } from 'src/apis/favorites/entities/favorites.entity';
+import { ProductImage } from 'src/apis/productImages/entities/product-image.entity';
+import { ProductReview } from 'src/apis/productReviews/entities/productReview.entity';
 import { ProductCategory } from 'src/apis/productsCategories/entities/productCategory.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
@@ -39,7 +41,19 @@ export class Product {
   @Field(() => User)
   user: User;
 
-  @OneToMany(() => Favorite, (favorite) => favorite.product)
+  @OneToMany(() => ProductImage, (productImage) => productImage.product)
+  @Field(() => [ProductImage])
+  productImages: ProductImage[];
+
+  @OneToMany(() => ProductReview, (productReview) => productReview.product, {
+    cascade: true,
+  })
+  @Field(() => [ProductReview])
+  productReviews: ProductReview[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.product, {
+    cascade: true,
+  })
   @Field(() => [Favorite])
   favorites: Favorite[];
 
