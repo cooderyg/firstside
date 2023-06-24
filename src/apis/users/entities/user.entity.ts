@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Favorite } from 'src/apis/favorites/entities/favorites.entity';
 import { ProductReview } from 'src/apis/productReviews/entities/productReview.entity';
+import { Product } from 'src/apis/products/entities/product.entity';
 import {
   Column,
   CreateDateColumn,
@@ -36,6 +37,12 @@ export class User {
   })
   @Field(() => [ProductReview])
   productReviews: ProductReview[];
+
+  @OneToMany(() => Product, (product) => product.user, {
+    cascade: true,
+  })
+  @Field(() => [Product])
+  products: Product[];
 
   @OneToMany(() => Favorite, (favorite) => favorite.user, {
     cascade: true,

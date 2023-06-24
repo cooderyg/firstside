@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,23 +15,15 @@ export class ProductsService {
   ) {}
 
   async findAll({ page }): Promise<Product[]> {
-    if (page) {
-      // 페이지네이션 기능 구현하기
-      return await this.productsRepository
-        .createQueryBuilder('product')
-        .innerJoinAndSelect('product.productCategory', 'productCategory')
-        .orderBy('product.createdAt', 'DESC')
-        .take(12)
-        .skip((page - 1) * 12)
-        .getMany();
-    } else {
-      return await this.productsRepository
-        .createQueryBuilder('product')
-        .innerJoinAndSelect('product.productCategory', 'productCategory')
-        .orderBy('createdAt', 'DESC')
-        .getMany();
-    }
+    return await this.productsRepository
+      .createQueryBuilder('product')
+      .innerJoinAndSelect('product.productCategory', 'productCategory')
+      .orderBy('product.createdAt', 'DESC')
+      .take(12)
+      .skip((page - 1) * 12)
+      .getMany();
   }
+
   // 조회할 때 favorites 배열이 담김 이걸 count만 할 수 있는 방법 찾기
   // 배열 length 로 카운트하는 건 비효율적인 것 같읍..
   findOne({ productId }: IProductsServiceFindOne): Promise<Product> {
@@ -41,6 +33,13 @@ export class ProductsService {
       .where('product.id = :id', { id: productId })
       .getOne();
   }
+
+  // 전체개수 카운팅
+  count(): Promise<number> {
+    return this.productsRepository.createQueryBuilder('product').getCount();
+  }
+
+  // 제품등록
   async create({
     createProductInput,
   }: IProductsServiceCreate): Promise<Product> {
@@ -53,5 +52,16 @@ export class ProductsService {
       },
     });
     return result;
+  }
+
+  // 제품삭제
+  async delete({ productId, userId }): Promise<boolean> {
+    const product = await this.findOne({ productId });
+    if (product.id !== userId) {
+      throw new HttpException('삭제할 권한이 없습니다.', 401);
+    }
+
+    const result = await this.productsRepository.softDelete({ id: productId });
+    return result.affected ? true : false;
   }
 }

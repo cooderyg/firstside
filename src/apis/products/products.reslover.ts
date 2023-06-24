@@ -1,16 +1,17 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
 import { CreateProductInput } from './dto/create-product.input';
+import { IContext } from 'src/commons/interfaces/context';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
 
 @Resolver()
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
-
+  //조회
   @Query(() => [Product])
-  fetchProducts(
-    @Args('page', { nullable: true }) page: number,
-  ): Promise<Product[]> {
+  fetchProducts(@Args('page') page: number): Promise<Product[]> {
     return this.productsService.findAll({ page });
   }
 
@@ -19,10 +20,26 @@ export class ProductsResolver {
     return this.productsService.findOne({ productId });
   }
 
+  @Query(() => Int)
+  fetchProductCount(): Promise<number> {
+    return this.productsService.count();
+  }
+
+  // 생성 삭제
   @Mutation(() => Product)
   createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ): Promise<Product> {
     return this.productsService.create({ createProductInput });
+  }
+
+  @UseGuards(GqlAuthGuard('access'))
+  @Mutation(() => Boolean)
+  deleteProduct(
+    @Context('context') context: IContext, //
+    @Args('productId') productId: string,
+  ): Promise<boolean> {
+    const userId = context.req.user.id;
+    return this.productsService.delete({ productId, userId });
   }
 }

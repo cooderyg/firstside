@@ -3,16 +3,14 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { BoardsModule } from './apis/boards/boards.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Board } from './apis/boards/entities/board.entity';
 import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './apis/products/products.module';
 import { ProductCategoriesModule } from './apis/productsCategories/productsCategories.module';
-import { Product } from './apis/products/entities/product.entity';
-import { ProductCategory } from './apis/productsCategories/entities/productCategory.entity';
 import { UsersModule } from './apis/users/users.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { FilesModule } from './apis/files/files.module';
 import { FavoritesModule } from './apis/favorites/favorites.module';
+import { ProductReviewsModule } from './apis/productReviews/productReviews.module';
 
 @Module({
   imports: [
@@ -21,6 +19,7 @@ import { FavoritesModule } from './apis/favorites/favorites.module';
     FavoritesModule,
     FilesModule,
     ProductsModule,
+    ProductReviewsModule,
     UsersModule,
     ProductCategoriesModule,
     ConfigModule.forRoot(),

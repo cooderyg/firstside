@@ -12,6 +12,7 @@ type Board {
 type ProductReview {
   id: String!
   content: String!
+  star: Int!
   user: User!
   product: Product!
   createdAt: DateTime!
@@ -28,6 +29,7 @@ type User {
   name: String!
   age: Int!
   productReviews: [ProductReview!]!
+  products: [Product!]!
   favorites: [Favorite!]!
   createdAt: DateTime!
 }
@@ -46,6 +48,7 @@ type ProductImage {
 type ProductCategory {
   id: String!
   name: String!
+  products: [Product!]!
 }
 
 type Product {
@@ -66,8 +69,11 @@ type Query {
   fetchUser: String!
   fetchBoards: [Board!]!
   fetchBoard(boardNumber: Float!): Board!
-  fetchProducts(page: Float): [Product!]!
+  fetchProducts(page: Float!): [Product!]!
   fetchProduct(productId: String!): Product!
+  fetchProductCount: Int!
+  fetchProductReviews(productId: String!, page: Float!): [ProductReview!]!
+  fetchProductReviewsCount(productId: String!): Int!
   fetchProductCategories: [ProductCategory!]!
 }
 
@@ -81,6 +87,9 @@ type Mutation {
   createFavorite(productId: String!): String!
   uploadFile(files: [Upload!]!): [String!]!
   createProduct(createProductInput: CreateProductInput!): Product!
+  deleteProduct(productId: String!): Boolean!
+  createProductReview(createProductReviewInput: CreateProductReviewInput!): ProductReview!
+  deleteProductReview(productReviewId: String!): String!
   createProductCategory(name: String!): ProductCategory!
 }
 
@@ -104,4 +113,10 @@ input CreateProductInput {
   description: String!
   price: Int!
   productCategoryId: String!
+}
+
+input CreateProductReviewInput {
+  content: String!
+  star: Int!
+  productId: String!
 }

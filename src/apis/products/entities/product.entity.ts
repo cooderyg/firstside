@@ -33,27 +33,37 @@ export class Product {
   @Field(() => Boolean)
   isSoldOut: boolean;
 
-  @ManyToOne(() => ProductCategory)
+  @ManyToOne(
+    () => ProductCategory,
+    (productcategory) => productcategory.products,
+  )
   @Field(() => ProductCategory)
   productCategory: ProductCategory;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.products)
   @Field(() => User)
   user: User;
 
-  @OneToMany(() => ProductImage, (productImage) => productImage.product)
+  @OneToMany(
+    () => ProductImage, //
+    (productImage) => productImage.product,
+  )
   @Field(() => [ProductImage])
   productImages: ProductImage[];
 
-  @OneToMany(() => ProductReview, (productReview) => productReview.product, {
-    cascade: true,
-  })
+  @OneToMany(
+    () => ProductReview, //
+    (productReview) => productReview.product,
+    { cascade: true },
+  )
   @Field(() => [ProductReview])
   productReviews: ProductReview[];
 
-  @OneToMany(() => Favorite, (favorite) => favorite.product, {
-    cascade: true,
-  })
+  @OneToMany(
+    () => Favorite, //
+    (favorite) => favorite.product,
+    { cascade: true },
+  )
   @Field(() => [Favorite])
   favorites: Favorite[];
 

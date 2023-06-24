@@ -1,9 +1,11 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Max, Min, isString } from 'class-validator';
 import { Product } from 'src/apis/products/entities/product.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -20,15 +22,18 @@ export class ProductReview {
   @Field(() => String)
   content: string;
 
-  //이미지 만들고 url칼럼넣기
+  @Column()
+  @Field(() => Int)
+  star: number;
 
-  @ManyToOne(() => User, {
+  //이미지 만들고 url칼럼넣기
+  @ManyToOne(() => User, (user) => user.productReviews, {
     onDelete: 'CASCADE',
   })
   @Field(() => User)
   user: User;
 
-  @ManyToOne(() => Product, {
+  @ManyToOne(() => Product, (product) => product.productReviews, {
     onDelete: 'CASCADE',
   })
   @Field(() => Product)
@@ -37,4 +42,7 @@ export class ProductReview {
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
