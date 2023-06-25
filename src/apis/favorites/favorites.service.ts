@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { Favorite } from './entities/favorites.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../products/entities/product.entity';
-import { ProductsService } from '../products/products.service';
+import { IFavoritesServiceCreate } from './interfaces/favorites-service.interface';
 
 @Injectable()
 export class FavoritesService {
@@ -14,7 +14,7 @@ export class FavoritesService {
     private readonly productsRepository: Repository<Product>,
   ) {}
 
-  async create({
+  async toggle({
     productId,
     userId,
   }: IFavoritesServiceCreate): Promise<string> {
@@ -54,9 +54,4 @@ export class FavoritesService {
       .andWhere('favorite.userId = :userId', { userId })
       .getOne();
   }
-}
-
-interface IFavoritesServiceCreate {
-  productId: string;
-  userId: string;
 }

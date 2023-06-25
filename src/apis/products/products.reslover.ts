@@ -9,23 +9,27 @@ import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
 @Resolver()
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
-  //조회
+
+  //-------------------------- 조회 --------------------------//
+  //제품 페이지조회
   @Query(() => [Product])
   fetchProducts(@Args('page') page: number): Promise<Product[]> {
     return this.productsService.findAll({ page });
   }
 
+  // 제품 상세조회
   @Query(() => Product)
   fetchProduct(@Args('productId') productId: string): Promise<Product> {
     return this.productsService.findOne({ productId });
   }
 
+  // 제품 카운트
   @Query(() => Int)
   fetchProductCount(): Promise<number> {
     return this.productsService.count();
   }
 
-  // 생성 삭제
+  //-------------------------- 생성 --------------------------//
   @Mutation(() => Product)
   createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
@@ -33,6 +37,7 @@ export class ProductsResolver {
     return this.productsService.create({ createProductInput });
   }
 
+  //-------------------------- 삭제 --------------------------//
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => Boolean)
   deleteProduct(

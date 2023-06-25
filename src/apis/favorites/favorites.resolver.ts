@@ -8,13 +8,14 @@ import { IContext } from 'src/commons/interfaces/context';
 export class FavoritesResolver {
   constructor(private readonly favoritesService: FavoritesService) {}
 
+  //-------------------------- 토글 --------------------------//
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => String)
-  createFavorite(
+  toggleFavorite(
     @Context() context: IContext,
     @Args('productId') productId: string,
   ): Promise<string> {
-    return this.favoritesService.create({
+    return this.favoritesService.toggle({
       productId,
       userId: context.req.user.id,
     });

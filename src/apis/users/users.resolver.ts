@@ -9,6 +9,7 @@ import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
+  //-------------------------- 조회 --------------------------//
   @UseGuards(GqlAuthGuard('access')) // 가드를 사용하지만 rest api 가 기본이기 때문에 Gql api에 맞춰주는 가드로 만듦
   @Query(() => String)
   fetchUser(@Context() context: IContext): string {
@@ -19,6 +20,7 @@ export class UsersResolver {
     return '인가에 성공하였습니다.';
   }
 
+  //-------------------------- 생성 --------------------------//
   @Mutation(() => User)
   createUser(
     @Args('email') email: string, //

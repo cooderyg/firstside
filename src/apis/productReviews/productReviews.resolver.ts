@@ -11,6 +11,7 @@ import { CreateProductReviewInput } from './dto/create-productReview.input';
 export class ProductReviewsResolver {
   constructor(private readonly productReviewsService: ProductReviewsService) {}
 
+  //-------------------------- 조회 --------------------------//
   // 제품별 리뷰조회
   @Query(() => [ProductReview])
   fetchProductReviews(
@@ -28,7 +29,7 @@ export class ProductReviewsResolver {
     return this.productReviewsService.countByProduct({ productId });
   }
 
-  // 리뷰 생성
+  //-------------------------- 생성 --------------------------//
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => ProductReview)
   createProductReview(
@@ -43,13 +44,13 @@ export class ProductReviewsResolver {
     });
   }
 
-  // 리뷰 삭제
+  //-------------------------- 삭제 --------------------------//
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => String)
   deleteProductReview(
     @Context() context: IContext,
     @Args('productReviewId') productReviewId: string, //
-  ): Promise<string | boolean> {
+  ): Promise<boolean> {
     const userId = context.req.user.id;
     return this.productReviewsService.delete({ productReviewId, userId });
   }

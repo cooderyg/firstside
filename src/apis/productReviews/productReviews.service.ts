@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductReview } from './entities/productReview.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ProductReviewsService {
@@ -29,7 +29,6 @@ export class ProductReviewsService {
       .getCount();
   }
 
-  // 생성
   async create({ createProductReviewInput, userId }): Promise<ProductReview> {
     const { content, star, productId } = createProductReviewInput;
     // 1. 결제테이블 만들면 일대일 관계만들고 결제내역자체로 확인해서 해당 유저가 리뷰작성 가능한지 검증하기
@@ -44,9 +43,11 @@ export class ProductReviewsService {
   }
 
   // 삭제
-  async delete({ productReviewId, userId }): Promise<string | boolean> {
+  async delete({ productReviewId, userId }): Promise<boolean> {
     const productReview = await this.findById({ productReviewId });
-    if (productReview.user.id !== userId) return '삭제할 권한이 없습니다';
+    if (productReview.user.id !== userId) {
+      throw new HttpException('삭제할 권한이 없습니다.', 401);
+    }
 
     const result = await this.productReviewsRepository.softDelete({
       id: productReviewId,
