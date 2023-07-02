@@ -6,12 +6,15 @@ import {
   IProductsServiceCreate,
   IProductsServiceFindOne,
 } from './interfaces/product-service.interface';
+import { ProductImagesService } from '../productImages/productImages.service';
+import { ProductImage } from '../productImages/entities/product-image.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>,
+    private readonly productImagesService: ProductImagesService,
   ) {}
 
   async findAll({ page }): Promise<Product[]> {
@@ -43,7 +46,7 @@ export class ProductsService {
   async create({
     createProductInput,
   }: IProductsServiceCreate): Promise<Product> {
-    const { productCategoryId, ...product } = createProductInput;
+    const { productCategoryId, imageUrls, ...product } = createProductInput;
 
     const result = await this.productsRepository.save({
       ...product,
@@ -51,6 +54,13 @@ export class ProductsService {
         id: productCategoryId,
       },
     });
+    // console.log(`result :${result.id}`);
+
+    await this.productImagesService.create({
+      imageUrls,
+      productId: result.id,
+    });
+
     return result;
   }
 

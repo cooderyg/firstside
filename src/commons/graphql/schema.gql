@@ -43,6 +43,8 @@ type Favorite {
 type ProductImage {
   id: String!
   url: String!
+  product: Product!
+  createdAt: DateTime!
 }
 
 type ProductCategory {
@@ -84,7 +86,7 @@ type Mutation {
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdataBoardInput!, boardNumber: Float!): Board!
   deleteBoard(boardNumber: Float!): Boolean!
-  createFavorite(productId: String!): String!
+  toggleFavorite(productId: String!): String!
   uploadFile(files: [Upload!]!): [String!]!
   createProduct(createProductInput: CreateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
@@ -113,6 +115,7 @@ input CreateProductInput {
   description: String!
   price: Int!
   productCategoryId: String!
+  imageUrls: [String!]!
 }
 
 input CreateProductReviewInput {
