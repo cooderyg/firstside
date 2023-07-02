@@ -5,6 +5,8 @@ import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { JwtNaverStrategy } from './strategies/jwt-social-naver.strategy';
+import { JwtKakaoStrategy } from './strategies/jwt-social-kakao.strategy';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
   providers: [
     JwtAccessStrategy,
     JwtRefreshStrategy,
+    JwtNaverStrategy,
+    JwtKakaoStrategy,
     AuthResolver, //
     AuthService,
   ],

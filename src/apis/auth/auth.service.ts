@@ -31,22 +31,32 @@ export class AuthService {
     if (!isAuth) throw new UnprocessableEntityException('암호가 틀렸습니다.');
 
     // 4. 헤더에 refreshToken 넣기 body랑 다르게 알아서 딸려들어가기 때문에 return이 필요없음
-    this.setRefreshToken({ user, context });
+    this.setRefreshToken({ user, res: context.res });
 
     // 5. 일치하는 유저도 있고 비번도 맞으면  accessToken 발급 및 전달
     return this.getAccessToken({ user });
   }
 
-  setRefreshToken({ user, context }: IAuthServiceSetRefreshToken): void {
+  async loginOAuth({ req, res }) {
+    // 1. 회원조회
+    let user = await this.usersService.findOneByEmail({
+      email: req.user.email,
+    });
+
+    if (!user) user = await this.usersService.create({ ...req.user });
+
+    this.setRefreshToken({ user, res });
+    res.redirect('http://localhost:5500/frontend/social-login.html');
+    // 나중에 프론트 주소 다시만들것
+  }
+
+  setRefreshToken({ user, res }: IAuthServiceSetRefreshToken): void {
     // 개발환경
     const refreshToken = this.jwtService.sign(
       { sub: user.id },
       { secret: '나의리프레시비밀번호', expiresIn: '2w' },
     );
-    context.res.setHeader(
-      'set-Cookie',
-      `refreshToken=${refreshToken}; path=/;`,
-    );
+    res.setHeader('set-Cookie', `refreshToken=${refreshToken}; path=/;`);
     // 배포환경 (배포환경에서는 httponly와 secuer 옵션을 적용해서 https환경만 사용가능 & 쿠키에 접근을 막을 수 있음)
     // context.res.setHeader('set-Cookie', `refreshToken=${refreshToken}; path=/; domain=.mybacksite.com; SameSite=None; Secure; httpOnly`,);
     // context.res.setHeader('Access-Control-Alloe-Origin', 'https://myfrontsite.com')
