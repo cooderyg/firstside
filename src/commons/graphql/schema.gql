@@ -72,10 +72,13 @@ type Query {
   fetchBoards: [Board!]!
   fetchBoard(boardNumber: Float!): Board!
   fetchProducts(page: Float!): [Product!]!
+  fetchFavProducts: [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductCount: Int!
-  fetchProductReviews(productId: String!, page: Float!): [ProductReview!]!
-  fetchProductReviewsCount(productId: String!): Int!
+  fetchProductReviewsFindByProduct(productId: String!, page: Float!): [ProductReview!]!
+  fetchProductReviewsFindByUser(page: Float!): [ProductReview!]!
+  fetchProductReviewsCountByProduct(productId: String!): Int!
+  fetchProductReviewsCountByUser: Int!
   fetchProductCategories: [ProductCategory!]!
 }
 

@@ -7,7 +7,6 @@ import {
   IProductsServiceFindOne,
 } from './interfaces/product-service.interface';
 import { ProductImagesService } from '../productImages/productImages.service';
-import { ProductImage } from '../productImages/entities/product-image.entity';
 
 @Injectable()
 export class ProductsService {
@@ -42,6 +41,17 @@ export class ProductsService {
     return this.productsRepository.createQueryBuilder('product').getCount();
   }
 
+  // fav한 게시물(wishlist)
+  async findFavProduct({ userId }): Promise<Product[]> {
+    return await this.productsRepository
+      .createQueryBuilder('product')
+      .innerJoinAndSelect('product.productCategory', 'productCategory')
+      .innerJoinAndSelect('product.favorites', 'favorite')
+      .innerJoinAndSelect('favorite.user', 'user')
+      .where('user.id = :userId', { userId })
+      .getMany();
+  }
+
   // 제품등록
   async create({
     createProductInput,
@@ -54,9 +64,8 @@ export class ProductsService {
         id: productCategoryId,
       },
     });
-    // console.log(`result :${result.id}`);
 
-    await this.productImagesService.create({
+    await this.productImagesService.createMany({
       imageUrls,
       productId: result.id,
     });

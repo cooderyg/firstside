@@ -10,7 +10,7 @@ export class ProductReviewsService {
     private readonly productReviewsRepository: Repository<ProductReview>,
   ) {}
 
-  //조회 (리뷰 페이지네이션)
+  //조회 (리뷰 제품별 페이지네이션)
   async findByProductId({ productId, page }): Promise<ProductReview[]> {
     return await this.productReviewsRepository
       .createQueryBuilder('productReview')
@@ -21,11 +21,30 @@ export class ProductReviewsService {
       .getMany();
   }
 
-  //조회 (리뷰 카운트)
+  //조회 (리뷰 유저별 페이지네이션)
+  async findByUserId({ userId, page }): Promise<ProductReview[]> {
+    return await this.productReviewsRepository
+      .createQueryBuilder('productReview')
+      .where('productReview.userId = :userId', { userId })
+      .orderBy('productReview.createdAt', 'DESC')
+      .take(10)
+      .skip((page - 1) * 10)
+      .getMany();
+  }
+
+  //조회 (리뷰 제품별 카운트)
   async countByProduct({ productId }): Promise<number> {
     return await this.productReviewsRepository
       .createQueryBuilder('productReview')
       .where('productReview.productId = :productId', { productId })
+      .getCount();
+  }
+
+  //조회 (리뷰 유저별 카운트)
+  async countByUser({ userId }): Promise<number> {
+    return await this.productReviewsRepository
+      .createQueryBuilder('productReview')
+      .where('productReview.userId = :userId', { userId })
       .getCount();
   }
 

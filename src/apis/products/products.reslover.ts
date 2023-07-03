@@ -17,6 +17,14 @@ export class ProductsResolver {
     return this.productsService.findAll({ page });
   }
 
+  // fav제품 조회
+  @UseGuards(GqlAuthGuard('access'))
+  @Query(() => [Product])
+  fetchFavProducts(@Context() context: IContext): Promise<Product[]> {
+    const userId = context.req.user.id;
+    return this.productsService.findFavProduct({ userId });
+  }
+
   // 제품 상세조회
   @Query(() => Product)
   fetchProduct(@Args('productId') productId: string): Promise<Product> {

@@ -4,7 +4,6 @@ import { ProductReview } from './entities/productReview.entity';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
 import { IContext } from 'src/commons/interfaces/context';
-import { Max, Min, min } from 'class-validator';
 import { CreateProductReviewInput } from './dto/create-productReview.input';
 
 @Resolver()
@@ -14,19 +13,38 @@ export class ProductReviewsResolver {
   //-------------------------- 조회 --------------------------//
   // 제품별 리뷰조회
   @Query(() => [ProductReview])
-  fetchProductReviews(
+  fetchProductReviewsFindByProduct(
     @Args('productId') productId: string, //
     @Args('page') page: number,
   ): Promise<ProductReview[]> {
     return this.productReviewsService.findByProductId({ productId, page });
   }
 
+  // 유저별 리뷰조회
+  @UseGuards(GqlAuthGuard('access'))
+  @Query(() => [ProductReview])
+  fetchProductReviewsFindByUser(
+    @Context() context: IContext,
+    @Args('page') page: number, //
+  ): Promise<ProductReview[]> {
+    const userId = context.req.user.id;
+    return this.productReviewsService.findByUserId({ userId, page });
+  }
   // 제품별 리뷰갯수 조회
   @Query(() => Int)
-  fetchProductReviewsCount(
+  fetchProductReviewsCountByProduct(
     @Args('productId') productId: string,
   ): Promise<number> {
     return this.productReviewsService.countByProduct({ productId });
+  }
+
+  // 유저별 리뷰갯수 조회
+  @Query(() => Int)
+  fetchProductReviewsCountByUser(
+    @Context() context: IContext,
+  ): Promise<number> {
+    const userId = context.req.user.id;
+    return this.productReviewsService.countByUser({ userId });
   }
 
   //-------------------------- 생성 --------------------------//

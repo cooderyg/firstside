@@ -25,6 +25,7 @@ export class FavoritesService {
     const product = await this.productsRepository.findOne({
       where: { id: productId },
     });
+
     // 1-2 존재하면 삭제
     if (favorite) {
       this.favoritesRepository.delete({ id: favorite.id });
@@ -50,7 +51,7 @@ export class FavoritesService {
   findFavoriteById({ productId, userId }): Promise<Favorite> {
     return this.favoritesRepository
       .createQueryBuilder('favorite')
-      .where('favorite.productId = productId', { productId })
+      .where('favorite.productId = :productId', { productId })
       .andWhere('favorite.userId = :userId', { userId })
       .getOne();
   }
