@@ -9,10 +9,9 @@ type Board {
   contents: String!
 }
 
-type ProductReview {
+type ProductCart {
   id: String!
-  content: String!
-  star: Int!
+  quantity: Int!
   user: User!
   product: Product!
   createdAt: DateTime!
@@ -23,6 +22,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type ProductReview {
+  id: String!
+  content: String!
+  star: Int!
+  user: User!
+  product: Product!
+  createdAt: DateTime!
+}
+
 type User {
   id: String!
   email: String!
@@ -31,6 +39,7 @@ type User {
   productReviews: [ProductReview!]!
   products: [Product!]!
   favorites: [Favorite!]!
+  productCarts: [ProductCart!]!
   createdAt: DateTime!
 }
 
@@ -60,6 +69,7 @@ type Product {
   isSoldOut: Boolean!
   productCategory: ProductCategory!
   user: User!
+  productCarts: [ProductCart!]!
   productImages: [ProductImage!]!
   productReviews: [ProductReview!]!
   favorites: [Favorite!]!
@@ -75,6 +85,7 @@ type Query {
   fetchFavProducts: [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductCount: Int!
+  fetchProductCarts: [ProductCart!]!
   fetchProductReviewsFindByProduct(productId: String!, page: Float!): [ProductReview!]!
   fetchProductReviewsFindByUser(page: Float!): [ProductReview!]!
   fetchProductReviewsCountByProduct(productId: String!): Int!
@@ -93,6 +104,9 @@ type Mutation {
   uploadFile(files: [Upload!]!): [String!]!
   createProduct(createProductInput: CreateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
+  createProductCart(productId: String!, quantity: Float!): ProductCart!
+  deleteProductCart(id: String!): String!
+  updateProductCart(productCartId: String!, quantity: Float!): String!
   createProductReview(createProductReviewInput: CreateProductReviewInput!): ProductReview!
   deleteProductReview(productReviewId: String!): String!
   createProductCategory(name: String!): ProductCategory!

@@ -11,6 +11,7 @@ import { AuthModule } from './apis/auth/auth.module';
 import { FilesModule } from './apis/files/files.module';
 import { FavoritesModule } from './apis/favorites/favorites.module';
 import { ProductReviewsModule } from './apis/productReviews/productReviews.module';
+import { ProductCartsModule } from './apis/productCarts/productCarts.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ProductReviewsModule } from './apis/productReviews/productReviews.modul
     FavoritesModule,
     FilesModule,
     ProductsModule,
+    ProductCartsModule,
     ProductReviewsModule,
     UsersModule,
     ProductCategoriesModule,

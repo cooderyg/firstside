@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Favorite } from 'src/apis/favorites/entities/favorites.entity';
+import { ProductCart } from 'src/apis/productCarts/entities/productCart.entity';
 import { ProductImage } from 'src/apis/productImages/entities/product-image.entity';
 import { ProductReview } from 'src/apis/productReviews/entities/productReview.entity';
 import { ProductCategory } from 'src/apis/productsCategories/entities/productCategory.entity';
@@ -35,7 +36,7 @@ export class Product {
 
   @ManyToOne(
     () => ProductCategory,
-    (productcategory) => productcategory.products,
+    (productCategory) => productCategory.products,
   )
   @Field(() => ProductCategory)
   productCategory: ProductCategory;
@@ -43,6 +44,14 @@ export class Product {
   @ManyToOne(() => User, (user) => user.products)
   @Field(() => User)
   user: User;
+
+  @OneToMany(
+    () => ProductCart,
+    (productCart) => productCart.product, //
+    { cascade: true },
+  )
+  @Field(() => [ProductCart])
+  productCarts: ProductCart[];
 
   @OneToMany(
     () => ProductImage, //
