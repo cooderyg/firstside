@@ -1,8 +1,8 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
+import { DynamicAuthGuard } from './guard/dynamic-auth.guard-04';
 
 interface IOAuthUser {
   user: {
@@ -20,30 +20,12 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
-  @UseGuards(AuthGuard('google'))
-  @Get('/login/google')
-  async loginGoogle(
+  @Get('/login/:social')
+  @UseGuards(DynamicAuthGuard)
+  loginOAuth(
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    this.authService.loginOAuth({ req, res });
-  }
-
-  @UseGuards(AuthGuard('kakao'))
-  @Get('/login/kakao')
-  async loginKakao(
-    @Req() req: Request & IOAuthUser, //
-    @Res() res: Response,
-  ) {
-    this.authService.loginOAuth({ req, res });
-  }
-
-  @UseGuards(AuthGuard('naver'))
-  @Get('/login/naver')
-  async loginNaver(
-    @Req() req: Request & IOAuthUser, //
-    @Res() res: Response,
-  ) {
-    this.authService.loginOAuth({ req, res });
+    return this.authService.loginOAuth({ req, res });
   }
 }

@@ -49,6 +49,7 @@ export class ProductsService {
       .innerJoinAndSelect('product.favorites', 'favorite')
       .innerJoinAndSelect('favorite.user', 'user')
       .where('user.id = :userId', { userId })
+      .orderBy('product.createdAt', 'DESC')
       .getMany();
   }
 
@@ -65,10 +66,12 @@ export class ProductsService {
       },
     });
 
-    await this.productImagesService.createMany({
-      imageUrls,
-      productId: result.id,
-    });
+    if (imageUrls.length) {
+      await this.productImagesService.createMany({
+        imageUrls,
+        productId: result.id,
+      });
+    }
 
     return result;
   }
