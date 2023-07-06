@@ -27,6 +27,10 @@ export class Product {
   name: string;
 
   @Column()
+  @Field(() => Int)
+  price: number;
+
+  @Column()
   @Field(() => String)
   description: string;
 

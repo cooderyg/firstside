@@ -65,6 +65,7 @@ type ProductCategory {
 type Product {
   id: String!
   name: String!
+  price: Int!
   description: String!
   isSoldOut: Boolean!
   productCategory: ProductCategory!
@@ -105,7 +106,7 @@ type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
   createProductCart(productId: String!, quantity: Float!): ProductCart!
-  deleteProductCart(id: String!): String!
+  deleteProductCart(productCartId: String!): String!
   updateProductCart(productCartId: String!, quantity: Float!): String!
   createProductReview(createProductReviewInput: CreateProductReviewInput!): ProductReview!
   deleteProductReview(productReviewId: String!): String!

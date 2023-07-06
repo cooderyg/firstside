@@ -57,10 +57,9 @@ export class ProductCartsSerivce {
   }: IProductCartsServiceDelete): Promise<string> {
     const result = await this.productCartsRepository
       .createQueryBuilder('productCart')
-      .innerJoinAndSelect('productCart.user', 'user')
       .delete()
       .where('id = :id', { id: productCartId })
-      .andWhere('user.id = :userId', { userId })
+      .andWhere('userId = :userId', { userId })
       .execute();
 
     if (!result.affected) {
