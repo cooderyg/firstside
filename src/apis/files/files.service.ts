@@ -1,6 +1,8 @@
 import { Storage } from '@google-cloud/storage';
 import { Injectable } from '@nestjs/common';
 import { FileUpload } from 'graphql-upload';
+import { getToday } from 'src/commons/libraries/utils';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IFilesServiceUpload {
   files: FileUpload[];
@@ -17,10 +19,10 @@ export class FilesService {
     // 1. 파일을 클라우드 스토리지에 저장하는 로직
 
     // 1-1) 스토리지 셋팅하기
-    const bucket = 'first-side';
+    const bucket = process.env.GCP_BUCKET_NAME;
     const storage = new Storage({
-      projectId: 'backend-388421',
-      keyFilename: 'gcp-file-storage.json',
+      projectId: process.env.GCP_PROJECT_ID,
+      keyFilename: process.env.GCP_KEY_FILE,
     }).bucket(bucket);
 
     // 1-2) 스토리지에 파일 올리기
@@ -29,9 +31,10 @@ export class FilesService {
       waitedFiles.map(
         (el) =>
           new Promise<string>((resolve, rejects) => {
+            const fileName = `${getToday()}/${uuidv4()}/origin/${el.filename}`;
             el.createReadStream()
-              .pipe(storage.file(el.filename).createWriteStream())
-              .on('finish', () => resolve(`${bucket}/${el.filename}`))
+              .pipe(storage.file(fileName).createWriteStream())
+              .on('finish', () => resolve(`${bucket}/${fileName}`))
               .on('error', () => rejects('파일전송 실패'));
           }),
       ),
