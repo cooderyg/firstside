@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductImage } from './entities/product-image.entity';
 import { Repository } from 'typeorm';
+import {
+  IProdcutImagesServiceDelete,
+  IProductImagesServiceCreate,
+} from './interfaces/productImage-service.interface';
 
 @Injectable()
 export class ProductImagesService {
@@ -52,12 +56,4 @@ export class ProductImagesService {
   //     .orUpdate(['id'], ['url'])
   //     .execute();
   // }
-}
-
-interface IProductImagesServiceCreate {
-  imageUrls: string[];
-  productId: string;
-}
-interface IProdcutImagesServiceDelete {
-  productImageId: string;
 }
