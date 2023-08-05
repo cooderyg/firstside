@@ -56,7 +56,7 @@ export class AuthService {
       { sub: user.id },
       { secret: '나의리프레시비밀번호', expiresIn: '2w' },
     );
-    res.setHeader('set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    res.cookie('refreshToken', refreshToken);
     // 배포환경 (배포환경에서는 httponly와 secuer 옵션을 적용해서 https환경만 사용가능 & 쿠키에 접근을 막을 수 있음)
     // context.res.setHeader('set-Cookie', `refreshToken=${refreshToken}; path=/; domain=.mybacksite.com; SameSite=None; Secure; httpOnly`,);
     // context.res.setHeader('Access-Control-Alloe-Origin', 'https://myfrontsite.com')
@@ -71,7 +71,7 @@ export class AuthService {
   // AccessToken 제작
   getAccessToken({ user }: IAuthServiceGetAccessToken): string {
     return this.jwtService.sign(
-      { sub: user.id },
+      { sub: user.id, roles: [user.role] },
       { secret: '나의비밀번호', expiresIn: '1h' },
     );
   }

@@ -3,7 +3,6 @@ import { BoardsService } from './boards.service';
 import { CreateBoardInput } from './dto/create-board.input';
 import { Board } from './entities/board.entity';
 import { UpdataBoardInput } from './dto/update-board.input';
-import { arch } from 'os';
 
 @Resolver()
 export class BoardsResolver {

@@ -13,6 +13,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -80,14 +81,18 @@ export class Product {
   @Field(() => [Favorite])
   favorites: Favorite[];
 
-  @Column({ default: 0 })
+  @Column({ default: 0, name: 'favorite_count' })
   @Field(() => Int)
   favoriteCount: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   @Field(() => Date)
   createdAt: Date;
 
-  @DeleteDateColumn() // 소프트삭제 graphql로는 boolean 값만 받음
+  @UpdateDateColumn({ name: 'updated_at' })
+  @Field(() => Date)
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at' }) // 소프트삭제 graphql로는 boolean 값만 받음
   deletedAt: Date;
 }

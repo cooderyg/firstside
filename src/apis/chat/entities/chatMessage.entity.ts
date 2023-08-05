@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Product } from 'src/apis/products/entities/product.entity';
+import { User } from 'src/apis/users/entities/user.entity';
+
 import {
   Column,
   CreateDateColumn,
@@ -12,18 +13,22 @@ import {
 
 @Entity()
 @ObjectType()
-export class ProductImage {
+export class ChatMessage {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
 
+  @Column({ type: 'longtext' })
+  @Field(() => String)
+  message: string;
+
   @Column()
   @Field(() => String)
-  url: string;
+  room: string;
 
-  @ManyToOne(() => Product, { onDelete: 'CASCADE' })
-  @Field(() => Product)
-  product: Product;
+  @ManyToOne(() => User)
+  @Field(() => User)
+  user: User;
 
   @CreateDateColumn({ name: 'created_at' })
   @Field(() => Date)

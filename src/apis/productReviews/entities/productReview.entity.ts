@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Max, Min, isString } from 'class-validator';
 import { Product } from 'src/apis/products/entities/product.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
@@ -9,6 +8,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -39,10 +39,14 @@ export class ProductReview {
   @Field(() => Product)
   product: Product;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   @Field(() => Date)
   createdAt: Date;
 
-  @DeleteDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
+  @Field(() => Date)
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
 }

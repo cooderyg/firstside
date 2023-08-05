@@ -4,9 +4,11 @@ import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -36,7 +38,14 @@ export class ProductCart {
   @Field(() => Product)
   product: Product;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   @Field(() => Date)
   createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  @Field(() => Date)
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at' })
+  deletedAt: Date;
 }

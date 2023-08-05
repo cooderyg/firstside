@@ -18,6 +18,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
     // console.log(payload); // payload : { sub: ---, iat: ---, exp: --- }
     return {
       id: payload.sub,
+      roles: payload.roles,
     };
   }
 }

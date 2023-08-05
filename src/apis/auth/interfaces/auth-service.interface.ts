@@ -11,7 +11,7 @@ export interface IAuthServiceGetAccessToken {
   user: User | IAuthUser['user'];
 }
 export interface IAuthServiceRestoreAccessToken {
-  user: IAuthUser['user'];
+  user: User | IAuthUser['user'];
 }
 
 export interface IAuthServiceLogin {
