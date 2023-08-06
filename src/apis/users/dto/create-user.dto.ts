@@ -1,27 +1,12 @@
-import { InputType, PickType } from '@nestjs/graphql';
+import { Field, InputType, Int, PickType } from '@nestjs/graphql';
 import { User } from '../entities/user.entity';
+import { IsNumber, Max, Min } from 'class-validator';
 
 @InputType()
-export class CreateUserDto extends PickType(User, [
-  'email',
-  'password',
-  'nickname',
-  'age',
-]) {}
-// @IsString()
-// @IsNotEmpty()
-// @Field(() => String)
-// email: string;
-// @IsString()
-// @IsNotEmpty()
-// @Field(() => String)
-// password: string;
-// @IsString()
-// @IsNotEmpty()
-// @Field(() => String)
-// name: string;
-// @IsNumber()
-// @Min(1)
-// @Max(120)
-// @Field(() => Int)
-// age: number;
+export class CreateUserInput extends PickType(User, ['email', 'password', 'nickname']) {
+  @IsNumber()
+  @Min(1)
+  @Max(120)
+  @Field(() => Int)
+  age: number;
+}

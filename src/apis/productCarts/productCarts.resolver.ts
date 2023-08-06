@@ -1,9 +1,10 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ProductCartsSerivce } from './productCarts.service';
-import { ProductCart, ProductInfo } from './entities/productCart.entity';
+import { ProductCart } from './entities/productCart.entity';
 import { IContext } from 'src/commons/interfaces/context';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
+import { UpdateProductCartInput } from './dto/update-productCart.dto';
 
 @Resolver()
 export class ProductCartsResolver {
@@ -45,14 +46,12 @@ export class ProductCartsResolver {
   @Mutation(() => String)
   updateProductCart(
     @Context() context: IContext,
-    @Args('productCartId') productCartId: string,
-    @Args('productInfos') productInfos: ProductInfo[],
-  ) {
+    @Args('updateProductCartInput') updateProductCartInput: UpdateProductCartInput,
+  ): Promise<string> {
     const userId = context.req.user.id;
     return this.productCartsService.update({
       userId,
-      productCartId,
-      productInfos,
+      updateProductCartInput,
     });
   }
 }

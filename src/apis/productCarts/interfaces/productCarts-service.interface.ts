@@ -1,4 +1,4 @@
-import { ProductInfo } from '../entities/productCart.entity';
+import { UpdateProductCartInput } from '../dto/update-productCart.dto';
 
 export interface IProductCartsServiceCreate {
   userId: string;
@@ -8,8 +8,7 @@ export interface IProductCartsServiceCreate {
 
 export interface IProductCartsServiceUpdate {
   userId: string;
-  productCartId: string;
-  productInfos: ProductInfo[];
+  updateProductCartInput: UpdateProductCartInput;
 }
 
 export interface IProductCartsServiceDelete {

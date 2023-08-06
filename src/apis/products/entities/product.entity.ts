@@ -15,10 +15,17 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { NumberValidator, StringValidator } from 'src/commons/decorators/validate.decorator';
 
+@ObjectType()
 export class Stock {
-  color?: string;
-  size?: string;
+  @StringValidator()
+  color: string;
+
+  @StringValidator()
+  size: string;
+
+  @NumberValidator()
   quantity: number;
 }
 
@@ -51,10 +58,7 @@ export class Product {
   @Field(() => Int)
   favoriteCount: number;
 
-  @ManyToOne(
-    () => ProductCategory,
-    (productCategory) => productCategory.products,
-  )
+  @ManyToOne(() => ProductCategory, (productCategory) => productCategory.products)
   @Field(() => ProductCategory)
   productCategory: ProductCategory;
 

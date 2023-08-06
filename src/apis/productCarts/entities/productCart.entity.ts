@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
@@ -9,13 +9,28 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+@ObjectType()
 export class ProductInfo {
+  @Field(() => String)
   productId: string;
+
+  @Field(() => String)
   productName: string;
+
+  @Field(() => Int)
   price: number;
+
+  @Field(() => Boolean)
+  isReviewed: boolean;
+
+  @Field(() => Int)
   quantity: number;
-  size?: string;
-  color?: string;
+
+  @Field(() => String)
+  size: string;
+
+  @Field(() => String)
+  color: string;
 }
 
 @Entity()
@@ -26,6 +41,7 @@ export class ProductCart {
   id: string;
 
   @Column({ type: 'simple-json', name: 'product_infos' })
+  @Field(() => [ProductInfo])
   productInfos: ProductInfo[];
 
   @OneToOne(() => User, (user) => user.productCart, { onDelete: 'CASCADE' })

@@ -29,11 +29,8 @@ export class ProductCartsSerivce {
     });
   }
 
-  async update({
-    userId,
-    productCartId,
-    productInfos,
-  }: IProductCartsServiceUpdate): Promise<string> {
+  async update({ userId, updateProductCartInput }: IProductCartsServiceUpdate): Promise<string> {
+    const { productInfos, productCartId } = updateProductCartInput;
     const result = await this.productCartsRepository
       .createQueryBuilder('productCart')
       .update()

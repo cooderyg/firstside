@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 import { IContext } from 'src/commons/interfaces/context';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserInput } from './dto/create-user.dto';
 
 @Resolver()
 export class UsersResolver {
@@ -20,7 +20,7 @@ export class UsersResolver {
 
   //-------------------------- 생성 --------------------------//
   @Mutation(() => User)
-  createUser(@Args() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create({ createUserDto });
+  createUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
+    return this.usersService.create({ createUserInput });
   }
 }

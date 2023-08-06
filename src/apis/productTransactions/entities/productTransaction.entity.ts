@@ -1,5 +1,6 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { IsArray, IsEnum, IsString } from 'class-validator';
+import { ProductInfo } from 'src/apis/productCarts/entities/productCart.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import { NumberValidator, StringValidator } from 'src/commons/decorators/validate.decorator';
 import {
@@ -22,14 +23,6 @@ export enum PRODUCT_TRANSACTION_STATUS {
 registerEnumType(PRODUCT_TRANSACTION_STATUS, {
   name: 'PRODUCT_TRANSACTION_STATUS',
 });
-
-export class ProductInfo {
-  productId: string;
-  productName: string;
-  isReviewed: boolean;
-  size?: number;
-  color?: string;
-}
 
 @Entity()
 @ObjectType()

@@ -12,7 +12,6 @@ import { FilesModule } from './apis/files/files.module';
 import { FavoritesModule } from './apis/favorites/favorites.module';
 import { ProductReviewsModule } from './apis/productReviews/productReviews.module';
 import { ProductCartsModule } from './apis/productCarts/productCarts.module';
-import GraphQLJSON from 'graphql-type-json';
 
 @Module({
   imports: [
@@ -30,7 +29,7 @@ import GraphQLJSON from 'graphql-type-json';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
-      resolvers: { JSON: GraphQLJSON },
+      // resolvers: { JSON: GraphQLJSON },
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',

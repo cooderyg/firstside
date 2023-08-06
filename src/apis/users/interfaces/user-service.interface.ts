@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserInput } from '../dto/create-user.dto';
 import { User } from '../entities/user.entity';
 
 export interface IUsersServiceFindOneByEamil {
@@ -11,7 +11,7 @@ export interface IUsersServiceFindById {
 }
 
 export interface IUsersServiceCreate {
-  createUserDto: CreateUserDto;
+  createUserInput: CreateUserInput;
 }
 
 export interface IUpdatePointWithManager {
