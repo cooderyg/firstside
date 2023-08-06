@@ -1,3 +1,5 @@
+import { ProductInfo } from '../entities/productCart.entity';
+
 export interface IProductCartsServiceCreate {
   userId: string;
   productId: string;
@@ -7,7 +9,7 @@ export interface IProductCartsServiceCreate {
 export interface IProductCartsServiceUpdate {
   userId: string;
   productCartId: string;
-  quantity: number;
+  productInfos: ProductInfo[];
 }
 
 export interface IProductCartsServiceDelete {
