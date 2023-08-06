@@ -6,9 +6,12 @@ import {
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ChatMessage } from './chatMessage.entity';
+import { Product } from 'src/apis/products/entities/product.entity';
 
 @Entity()
 @ObjectType()
@@ -24,6 +27,18 @@ export class ChatRoom {
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
+
+  @ManyToOne(() => Product)
+  @Field(() => Product)
+  product: Product;
+
+  @OneToMany(
+    () => ChatMessage, //
+    (chatMessage) => chatMessage.chatRoom,
+    { cascade: true },
+  )
+  @Field(() => [ChatMessage])
+  chatMessages: ChatMessage[];
 
   @CreateDateColumn({ name: 'created_at' })
   @Field(() => Date)

@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Max, Min } from 'class-validator';
 import { Product } from 'src/apis/products/entities/product.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
@@ -20,11 +21,13 @@ export class ProductReview {
 
   @Column()
   @Field(() => String)
-  content: string;
+  contents: string;
 
+  @Max(5)
+  @Min(1)
   @Column()
   @Field(() => Int)
-  star: number;
+  score: number;
 
   //이미지 만들고 url칼럼넣기
   @ManyToOne(() => User, (user) => user.productReviews, {

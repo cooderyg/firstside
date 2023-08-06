@@ -1,10 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Min } from 'class-validator';
 import { Favorite } from 'src/apis/favorites/entities/favorites.entity';
-import { ProductCart } from 'src/apis/productCarts/entities/productCart.entity';
 import { ProductImage } from 'src/apis/productImages/entities/product-image.entity';
 import { ProductReview } from 'src/apis/productReviews/entities/productReview.entity';
-import { ProductCategory } from 'src/apis/productsCategories/entities/productCategory.entity';
-import { User } from 'src/apis/users/entities/user.entity';
+import { ProductCategory } from 'src/apis/productCategories/entities/productCategory.entity';
+import { Store } from 'src/apis/stores/entities/store.entity';
 import {
   Column,
   CreateDateColumn,
@@ -15,6 +15,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+export class Stock {
+  color?: string;
+  size?: string;
+  quantity: number;
+}
 
 @Entity()
 @ObjectType()
@@ -27,6 +33,7 @@ export class Product {
   @Field(() => String)
   name: string;
 
+  @Min(1)
   @Column()
   @Field(() => Int)
   price: number;
@@ -35,9 +42,14 @@ export class Product {
   @Field(() => String)
   description: string;
 
-  @Column({ default: false })
-  @Field(() => Boolean)
-  isSoldOut: boolean;
+  @Column({ type: 'simple-json' })
+  @Field(() => [Stock])
+  stock: Stock[];
+
+  @Min(0)
+  @Column({ default: 0, name: 'favorite_count' })
+  @Field(() => Int)
+  favoriteCount: number;
 
   @ManyToOne(
     () => ProductCategory,
@@ -46,44 +58,23 @@ export class Product {
   @Field(() => ProductCategory)
   productCategory: ProductCategory;
 
-  @ManyToOne(() => User, (user) => user.products)
-  @Field(() => User)
-  user: User;
+  @ManyToOne(() => Store, (store) => store.products)
+  @Field(() => Store)
+  store: Store;
 
-  @OneToMany(
-    () => ProductCart,
-    (productCart) => productCart.product, //
-    { cascade: true },
-  )
-  @Field(() => [ProductCart])
-  productCarts: ProductCart[];
-
-  @OneToMany(
-    () => ProductImage, //
-    (productImage) => productImage.product,
-  )
+  @OneToMany(() => ProductImage, (productImage) => productImage.product)
   @Field(() => [ProductImage])
   productImages: ProductImage[];
 
-  @OneToMany(
-    () => ProductReview, //
-    (productReview) => productReview.product,
-    { cascade: true },
-  )
+  @OneToMany(() => ProductReview, (productReview) => productReview.product, {
+    cascade: true,
+  })
   @Field(() => [ProductReview])
   productReviews: ProductReview[];
 
-  @OneToMany(
-    () => Favorite, //
-    (favorite) => favorite.product,
-    { cascade: true },
-  )
+  @OneToMany(() => Favorite, (favorite) => favorite.product, { cascade: true })
   @Field(() => [Favorite])
   favorites: Favorite[];
-
-  @Column({ default: 0, name: 'favorite_count' })
-  @Field(() => Int)
-  favoriteCount: number;
 
   @CreateDateColumn({ name: 'created_at' })
   @Field(() => Date)

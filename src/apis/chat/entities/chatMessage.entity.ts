@@ -1,15 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { User } from 'src/apis/users/entities/user.entity';
 
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ChatRoom } from './chatRoom.entity';
 
 @Entity()
 @ObjectType()
@@ -22,13 +21,9 @@ export class ChatMessage {
   @Field(() => String)
   message: string;
 
-  @Column()
-  @Field(() => String)
-  room: string;
-
-  @ManyToOne(() => User)
-  @Field(() => User)
-  user: User;
+  @Column({ name: 'is_seller' })
+  @Field(() => Boolean)
+  isSeller: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
   @Field(() => Date)
@@ -38,6 +33,11 @@ export class ChatMessage {
   @Field(() => Date)
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: Date;
+  @ManyToOne(
+    () => ChatRoom, //
+    (chatRoom) => chatRoom.chatMessages,
+    { onDelete: 'CASCADE' },
+  )
+  @Field(() => ChatRoom)
+  chatRoom: ChatRoom;
 }
