@@ -4,6 +4,7 @@ import { ProductCart } from './entities/productCart.entity';
 import { IContext } from 'src/commons/interfaces/context';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
+import { UpdateProductCartInput } from './dto/update-productCart.dto';
 
 @Resolver()
 export class ProductCartsResolver {
@@ -45,14 +46,12 @@ export class ProductCartsResolver {
   @Mutation(() => String)
   updateProductCart(
     @Context() context: IContext,
-    @Args('productCartId') productCartId: string,
-    @Args('quantity') quantity: number,
-  ) {
+    @Args('updateProductCartInput') updateProductCartInput: UpdateProductCartInput,
+  ): Promise<string> {
     const userId = context.req.user.id;
     return this.productCartsService.update({
       userId,
-      productCartId,
-      quantity,
+      updateProductCartInput,
     });
   }
 }

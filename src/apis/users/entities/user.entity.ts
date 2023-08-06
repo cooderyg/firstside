@@ -1,14 +1,20 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { IsString, Max, Min } from 'class-validator';
 import { Favorite } from 'src/apis/favorites/entities/favorites.entity';
 import { ProductCart } from 'src/apis/productCarts/entities/productCart.entity';
 import { ProductReview } from 'src/apis/productReviews/entities/productReview.entity';
-import { Product } from 'src/apis/products/entities/product.entity';
+import { Store } from 'src/apis/stores/entities/store.entity';
+import {
+  NumberValidator,
+  StringValidator,
+} from 'src/commons/decorators/validate.decorator';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -25,27 +31,48 @@ registerEnumType(ROLE, { name: 'ROLE' });
 @ObjectType()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  @Field(() => String)
+  @StringValidator()
   id: string;
 
   @Column()
-  @Field(() => String)
+  @StringValidator()
   email: string;
 
   @Column()
   password: string;
 
   @Column()
-  @Field(() => String)
-  name: string;
+  @StringValidator()
+  nickname: string;
+
+  @Column()
+  @Min(1)
+  @Max(120)
+  @NumberValidator()
+  age: number;
 
   @Column()
   @Field(() => Int)
-  age: number;
+  point: number;
+
+  @Column({ nullable: true, name: 'refresh_token' })
+  @IsString()
+  @Field(() => String, { nullable: true })
+  refreshToken: string;
 
   @Column({ type: 'enum', enum: ROLE })
   @Field(() => ROLE)
   role: ROLE;
+
+  @OneToOne(() => Store, (store) => store.user)
+  @Field(() => Store)
+  store: Store;
+
+  @OneToOne(() => ProductCart, (productCart) => productCart.user, {
+    cascade: true,
+  })
+  @Field(() => ProductCart)
+  productCart: ProductCart;
 
   @OneToMany(() => ProductReview, (productReview) => productReview.user, {
     cascade: true,
@@ -53,25 +80,11 @@ export class User {
   @Field(() => [ProductReview])
   productReviews: ProductReview[];
 
-  @OneToMany(() => Product, (product) => product.user, {
-    cascade: true,
-  })
-  @Field(() => [Product])
-  products: Product[];
-
   @OneToMany(() => Favorite, (favorite) => favorite.user, {
     cascade: true,
   })
   @Field(() => [Favorite])
   favorites: Favorite[];
-
-  @OneToMany(
-    () => ProductCart,
-    (productCart) => productCart.user, //
-    { cascade: true },
-  )
-  @Field(() => [ProductCart])
-  productCarts: ProductCart[];
 
   @CreateDateColumn({ name: 'created_at' })
   @Field(() => Date)

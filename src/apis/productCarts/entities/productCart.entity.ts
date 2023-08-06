@@ -1,15 +1,37 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Product } from 'src/apis/products/entities/product.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+@ObjectType()
+export class ProductInfo {
+  @Field(() => String)
+  productId: string;
+
+  @Field(() => String)
+  productName: string;
+
+  @Field(() => Int)
+  price: number;
+
+  @Field(() => Boolean)
+  isReviewed: boolean;
+
+  @Field(() => Int)
+  quantity: number;
+
+  @Field(() => String)
+  size: string;
+
+  @Field(() => String)
+  color: string;
+}
 
 @Entity()
 @ObjectType()
@@ -18,25 +40,13 @@ export class ProductCart {
   @Field(() => String)
   id: string;
 
-  @Column({ default: 1 })
-  @Field(() => Int)
-  quantity: number;
+  @Column({ type: 'simple-json', name: 'product_infos' })
+  @Field(() => [ProductInfo])
+  productInfos: ProductInfo[];
 
-  @ManyToOne(
-    () => User,
-    (user) => user.productCarts, //
-    { onDelete: 'CASCADE' },
-  )
+  @OneToOne(() => User, (user) => user.productCart, { onDelete: 'CASCADE' })
   @Field(() => User)
   user: User;
-
-  @ManyToOne(
-    () => Product,
-    (product) => product.productCarts, //
-    { onDelete: 'CASCADE' },
-  )
-  @Field(() => Product)
-  product: Product;
 
   @CreateDateColumn({ name: 'created_at' })
   @Field(() => Date)
@@ -45,7 +55,4 @@ export class ProductCart {
   @UpdateDateColumn({ name: 'updated_at' })
   @Field(() => Date)
   updatedAt: Date;
-
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: Date;
 }

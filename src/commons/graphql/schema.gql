@@ -7,14 +7,8 @@ type Board {
   writer: String!
   title: String!
   contents: String!
-}
-
-type ProductCart {
-  id: String!
-  quantity: Int!
-  user: User!
-  product: Product!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """
@@ -22,25 +16,62 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type ProductInfo {
+  productId: String!
+  productName: String!
+  price: Int!
+  isReviewed: Boolean!
+  quantity: Int!
+  size: String!
+  color: String!
+}
+
+type ProductCart {
+  id: String!
+  productInfos: [ProductInfo!]!
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type ProductReview {
   id: String!
-  content: String!
-  star: Int!
+  contents: String!
+  score: Int!
   user: User!
   product: Product!
   createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Store {
+  id: String!
+  sales: Int!
+  name: String!
+  user: User!
+  products: [Product!]!
 }
 
 type User {
   id: String!
   email: String!
-  name: String!
+  nickname: String!
   age: Int!
+  point: Int!
+  refreshToken: String
+  role: ROLE!
+  store: Store!
+  productCart: ProductCart!
   productReviews: [ProductReview!]!
-  products: [Product!]!
   favorites: [Favorite!]!
-  productCarts: [ProductCart!]!
   createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum ROLE {
+  ADMIN
+  SELLER
+  USER
 }
 
 type Favorite {
@@ -54,12 +85,21 @@ type ProductImage {
   url: String!
   product: Product!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ProductCategory {
   id: String!
   name: String!
   products: [Product!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Stock {
+  color: String!
+  size: String!
+  quantity: Int!
 }
 
 type Product {
@@ -67,15 +107,54 @@ type Product {
   name: String!
   price: Int!
   description: String!
-  isSoldOut: Boolean!
+  stock: [Stock!]!
+  favoriteCount: Int!
   productCategory: ProductCategory!
-  user: User!
-  productCarts: [ProductCart!]!
+  store: Store!
   productImages: [ProductImage!]!
   productReviews: [ProductReview!]!
   favorites: [Favorite!]!
-  favoriteCount: Int!
   createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ProductTransaction {
+  id: String!
+  amount: Int!
+  pointAmount: Int!
+  impUid: String
+  productInfos: [ProductInfo!]!
+  status: PRODUCT_TRANSACTION_STATUS!
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum PRODUCT_TRANSACTION_STATUS {
+  PAYMENT
+  DELIVERY
+  CANCEL
+  COMPLETE
+  RETURN
+}
+
+type ChatRoom {
+  id: String!
+  room: String!
+  user: User!
+  product: Product!
+  chatMessages: [ChatMessage!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ChatMessage {
+  id: String!
+  message: String!
+  isSeller: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  chatRoom: ChatRoom!
 }
 
 type Query {
@@ -97,7 +176,7 @@ type Query {
 type Mutation {
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
-  createUser(email: String!, password: String!, name: String!, age: Int!): User!
+  createUser(createUserInput: CreateUserInput!): User!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdataBoardInput!, boardNumber: Float!): Board!
   deleteBoard(boardNumber: Float!): Boolean!
@@ -107,10 +186,16 @@ type Mutation {
   deleteProduct(productId: String!): Boolean!
   createProductCart(productId: String!, quantity: Float!): ProductCart!
   deleteProductCart(productCartId: String!): String!
-  updateProductCart(productCartId: String!, quantity: Float!): String!
+  updateProductCart(updateProductCartInput: UpdateProductCartInput!): String!
   createProductReview(createProductReviewInput: CreateProductReviewInput!): ProductReview!
   deleteProductReview(productReviewId: String!): String!
+  createProductTransaction(createProductTransactionInput: CreateProductTransactionInput!): ProductTransaction!
+  createStore(createStoreInput: CreateStoreInput!): Store!
   createProductCategory(name: String!): ProductCategory!
+}
+
+input CreateUserInput {
+  age: Int!
 }
 
 input CreateBoardInput {
@@ -136,8 +221,34 @@ input CreateProductInput {
   imageUrls: [String!]!
 }
 
-input CreateProductReviewInput {
-  content: String!
-  star: Int!
+input UpdateProductCartInput {
+  productInfos: [ProductInfoInput!]!
+  productCartId: String!
+}
+
+input ProductInfoInput {
   productId: String!
+  productName: String!
+  price: Int!
+  isReviewed: Boolean!
+  quantity: Int!
+  size: String!
+  color: String!
+}
+
+input CreateProductReviewInput {
+  contents: String!
+  score: Int!
+  productInfo: ProductInfoInput!
+  productTransactionId: String!
+}
+
+input CreateProductTransactionInput {
+  productInfos: [ProductInfoInput!]!
+  storeId: String!
+  impUid: String
+}
+
+input CreateStoreInput {
+  name: String!
 }

@@ -5,7 +5,7 @@ import { BoardsModule } from './apis/boards/boards.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './apis/products/products.module';
-import { ProductCategoriesModule } from './apis/productsCategories/productsCategories.module';
+import { ProductCategoriesModule } from './apis/productCategories/productsCategories.module';
 import { UsersModule } from './apis/users/users.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { FilesModule } from './apis/files/files.module';
@@ -29,6 +29,7 @@ import { ProductCartsModule } from './apis/productCarts/productCarts.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
+      // resolvers: { JSON: GraphQLJSON },
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',

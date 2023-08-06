@@ -1,3 +1,5 @@
+import { UpdateProductCartInput } from '../dto/update-productCart.dto';
+
 export interface IProductCartsServiceCreate {
   userId: string;
   productId: string;
@@ -6,8 +8,7 @@ export interface IProductCartsServiceCreate {
 
 export interface IProductCartsServiceUpdate {
   userId: string;
-  productCartId: string;
-  quantity: number;
+  updateProductCartInput: UpdateProductCartInput;
 }
 
 export interface IProductCartsServiceDelete {

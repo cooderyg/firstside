@@ -1,11 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ProductsCategoriesService } from './productsCategories.service';
+import { ProductCategoriesService } from './productsCategories.service';
 import { ProductCategory } from './entities/productCategory.entity';
 
 @Resolver()
-export class ProductsCategoriesResolver {
+export class ProductCategoriesResolver {
   constructor(
-    private readonly productCategoriesService: ProductsCategoriesService,
+    private readonly productCategoriesService: ProductCategoriesService,
   ) {}
   //-------------------------- 조회 --------------------------//
   @Query(() => [ProductCategory])

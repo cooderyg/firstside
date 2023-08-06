@@ -17,11 +17,7 @@ export class ProductCartsSerivce {
     private readonly productCartsRepository: Repository<ProductCart>,
   ) {}
 
-  async create({
-    userId,
-    productId,
-    quantity,
-  }: IProductCartsServiceCreate): Promise<ProductCart> {
+  async create({ userId, productId, quantity }: IProductCartsServiceCreate): Promise<ProductCart> {
     const isExisted = await this.findByUserAndProduct({ userId, productId });
 
     if (isExisted) throw new ConflictException('이미 생성된 카트입니다.');
@@ -33,28 +29,20 @@ export class ProductCartsSerivce {
     });
   }
 
-  async update({
-    userId,
-    productCartId,
-    quantity,
-  }: IProductCartsServiceUpdate): Promise<string> {
+  async update({ userId, updateProductCartInput }: IProductCartsServiceUpdate): Promise<string> {
+    const { productInfos, productCartId } = updateProductCartInput;
     const result = await this.productCartsRepository
       .createQueryBuilder('productCart')
       .update()
-      .set({ quantity })
+      .set({ productInfos })
       .where('id = :id', { id: productCartId })
       .andWhere('userId = :userId', { userId })
       .execute();
-
-    if (!result.affected)
-      throw new HttpException('업데이트할 권한이 없습니다.', 401);
+    if (!result.affected) throw new HttpException('업데이트할 권한이 없습니다.', 401);
     return '업데이트가 완료되었습니다.';
   }
 
-  async delete({
-    userId,
-    productCartId,
-  }: IProductCartsServiceDelete): Promise<string> {
+  async delete({ userId, productCartId }: IProductCartsServiceDelete): Promise<string> {
     const result = await this.productCartsRepository
       .createQueryBuilder('productCart')
       .delete()
@@ -83,9 +71,7 @@ export class ProductCartsSerivce {
   }
 
   // 가격 구해서 칼럼하나만들어서 리턴하게하기
-  async findByUser({
-    userId,
-  }: IProductCartsServiceFindByUser): Promise<ProductCart[]> {
+  async findByUser({ userId }: IProductCartsServiceFindByUser): Promise<ProductCart[]> {
     return await this.productCartsRepository
       .createQueryBuilder('productCart')
       .leftJoinAndSelect('productCart.user', 'user')
