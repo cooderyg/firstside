@@ -15,11 +15,9 @@ export class AuthService {
     private readonly usersService: UsersService, //
     private readonly jwtService: JwtService,
   ) {}
-  async login({
-    email,
-    password,
-    context,
-  }: IAuthServiceLogin): Promise<string> {
+  async login({ loginInput, context }: IAuthServiceLogin): Promise<string> {
+    const { email, password } = loginInput;
+
     // 1. 이메일이 일치하는 유저 찾기
     const user = await this.usersService.findOneByEmail({ email });
 

@@ -4,7 +4,7 @@ import { ProductCart } from './entities/productCart.entity';
 import { IContext } from 'src/commons/interfaces/context';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
-import { UpdateProductCartInput } from './dto/update-productCart.dto';
+import { UpdateProductCartInput } from './dto/update-productCart.input';
 
 @Resolver()
 export class ProductCartsResolver {

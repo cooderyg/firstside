@@ -26,7 +26,8 @@ export class ProductImagesService {
     await this.productImagesRepository.insert(temp);
   }
 
-  async delete({ productImageId }: IProdcutImagesServiceDelete): Promise<boolean> {
+  async delete({ deleteProductImageInput }: IProdcutImagesServiceDelete): Promise<boolean> {
+    const { productImageId } = deleteProductImageInput;
     const result = await this.productImagesRepository.softDelete({
       id: productImageId,
     });

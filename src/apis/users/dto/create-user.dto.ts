@@ -24,5 +24,3 @@ export class CreateUserInput {
   @Field(() => ROLE)
   role: ROLE;
 }
-
-// extends PickType(User, ['email', 'password', 'nickname'])

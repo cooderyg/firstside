@@ -1,4 +1,4 @@
-import { UpdateProductCartInput } from '../dto/update-productCart.dto';
+import { UpdateProductCartInput } from '../dto/update-productCart.input';
 
 export interface IProductCartsServiceCreate {
   userId: string;

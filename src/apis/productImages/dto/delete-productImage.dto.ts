@@ -2,7 +2,7 @@ import { InputType } from '@nestjs/graphql';
 import { StringValidator } from 'src/commons/decorators/validate.decorator';
 
 @InputType()
-export class CreateStoreInput {
+export class DeleteProductImageInput {
   @StringValidator()
-  name: string;
+  productImageId: string;
 }

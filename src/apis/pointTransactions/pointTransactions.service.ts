@@ -61,10 +61,10 @@ export class PointTransactionsService {
   }
 
   async createForPayment({
-    impUid,
-    amount,
+    createPointTransactionInput,
     user,
   }: IPointTransactionsServiceCreateForPayment): Promise<PointTransaction> {
+    const { amount, impUid } = createPointTransactionInput;
     await this.iamportService.checkPaid({ impUid, amount }); // 결제완료 상태인지 검증하기
     await this.checkDuplication({ impUid }); // 이미 결제됐던 id인지 검증하기
 
@@ -102,7 +102,11 @@ export class PointTransactionsService {
       throw new UnprocessableEntityException('포인트가 부족합니다.');
   }
 
-  async cancel({ impUid, user }: IPointTransactionsServiceCancel): Promise<PointTransaction> {
+  async cancel({
+    cancelPointTransactionInput,
+    user,
+  }: IPointTransactionsServiceCancel): Promise<PointTransaction> {
+    const { impUid } = cancelPointTransactionInput;
     const pointTransactions = await this.findByImpUidAndUser({ impUid, user }); // 결제내역 조회하기
     this.checkAlreadyCanceled({ pointTransactions }); // 이미 취소됐던 id인지 검증하기
     this.checkHasCancelablePoint({ pointTransactions }); // 포인트가 취소하기에 충분히 있는지 검증하기

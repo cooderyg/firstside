@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsArray, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, Min, ValidateNested } from 'class-validator';
 import { NumberValidator, StringValidator } from 'src/commons/decorators/validate.decorator';
 
 @InputType()
@@ -33,10 +34,13 @@ export class CreateProductInput {
   storeId: string;
 
   @IsArray()
+  @ValidateNested({ each: true })
   @Field(() => [String])
   imageUrls: string[];
 
   @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => StockInput)
   @Field(() => [StockInput])
   stock: StockInput[];
 }

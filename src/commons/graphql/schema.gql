@@ -176,7 +176,7 @@ type Query {
 }
 
 type Mutation {
-  login(email: String!, password: String!): String!
+  login(loginInput: LoginInput!): String!
   restoreAccessToken: String!
   createUser(createUserInput: CreateUserInput!): User!
   createBoard(createBoardInput: CreateBoardInput!): Board!
@@ -193,7 +193,12 @@ type Mutation {
   deleteProductReview(productReviewId: String!): String!
   createProductTransaction(createProductTransactionInput: CreateProductTransactionInput!): ProductTransaction!
   createStore(createStoreInput: CreateStoreInput!): Store!
-  createProductCategory(name: String!): ProductCategory!
+  createProductCategory(createProductCategoryInput: CreateProductCategoryInput!): ProductCategory!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 input CreateUserInput {
@@ -266,5 +271,9 @@ input CreateProductTransactionInput {
 }
 
 input CreateStoreInput {
+  name: String!
+}
+
+input CreateProductCategoryInput {
   name: String!
 }

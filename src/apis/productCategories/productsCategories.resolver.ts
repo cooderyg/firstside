@@ -1,12 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ProductCategoriesService } from './productsCategories.service';
 import { ProductCategory } from './entities/productCategory.entity';
+import { CreateProductCategoryInput } from './dto/create-productCategory.input';
 
 @Resolver()
 export class ProductCategoriesResolver {
-  constructor(
-    private readonly productCategoriesService: ProductCategoriesService,
-  ) {}
+  constructor(private readonly productCategoriesService: ProductCategoriesService) {}
   //-------------------------- 조회 --------------------------//
   @Query(() => [ProductCategory])
   fetchProductCategories(): Promise<ProductCategory[]> {
@@ -15,7 +14,9 @@ export class ProductCategoriesResolver {
 
   //-------------------------- 생성 --------------------------//
   @Mutation(() => ProductCategory)
-  createProductCategory(@Args('name') name: string): Promise<ProductCategory> {
-    return this.productCategoriesService.create({ name });
+  createProductCategory(
+    @Args('createProductCategoryInput') createProductCategoryInput: CreateProductCategoryInput,
+  ): Promise<ProductCategory> {
+    return this.productCategoriesService.create({ createProductCategoryInput });
   }
 }

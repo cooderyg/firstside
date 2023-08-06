@@ -19,7 +19,6 @@ export enum ROLE {
   SELLER = 'SELLER',
   USER = 'USER',
 }
-
 registerEnumType(ROLE, { name: 'ROLE' });
 
 @Entity()

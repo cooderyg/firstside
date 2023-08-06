@@ -1,11 +1,40 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { NumberValidator, StringValidator } from 'src/commons/decorators/validate.decorator';
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+
+@InputType()
+export class ProductInfoInput {
+  @StringValidator()
+  productId: string;
+
+  @StringValidator()
+  productName: string;
+
+  @NumberValidator()
+  price: number;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  @Field(() => Boolean)
+  isReviewed: boolean;
+
+  @NumberValidator()
+  quantity: number;
+
+  @StringValidator()
+  size: string;
+
+  @StringValidator()
+  color: string;
+}
 
 @InputType()
 export class CreateProductTransactionInput {
   @IsArray()
+  @ValidateNested({ each: true })
   @Field(() => [ProductInfoInput])
+  @Type(() => ProductInfoInput)
   productInfos: ProductInfoInput[];
 
   @StringValidator()
@@ -18,30 +47,7 @@ export class CreateProductTransactionInput {
   pointAmount: number;
 
   @IsString()
+  @IsNotEmpty()
   @Field(() => String, { nullable: true })
   impUid?: string;
-}
-
-@InputType()
-export class ProductInfoInput {
-  @Field(() => String)
-  productId: string;
-
-  @Field(() => String)
-  productName: string;
-
-  @Field(() => Int)
-  price: number;
-
-  @Field(() => Boolean)
-  isReviewed: boolean;
-
-  @Field(() => Int)
-  quantity: number;
-
-  @Field(() => String)
-  size: string;
-
-  @Field(() => String)
-  color: string;
 }

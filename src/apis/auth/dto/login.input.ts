@@ -2,7 +2,10 @@ import { InputType } from '@nestjs/graphql';
 import { StringValidator } from 'src/commons/decorators/validate.decorator';
 
 @InputType()
-export class CreateStoreInput {
+export class LoginInput {
   @StringValidator()
-  name: string;
+  email: string;
+
+  @StringValidator()
+  password: string;
 }

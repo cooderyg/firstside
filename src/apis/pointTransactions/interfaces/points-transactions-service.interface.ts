@@ -1,8 +1,7 @@
 import { IAuthUser } from 'src/commons/interfaces/context';
-import {
-  POINT_TRANSACTION_STATUS,
-  PointTransaction,
-} from '../entities/pointTransaction.entity';
+import { POINT_TRANSACTION_STATUS, PointTransaction } from '../entities/pointTransaction.entity';
+import { CreatePointTransactionInput } from '../dto/create-pointTrasaction.input';
+import { CancelPointTransactionInput } from '../dto/cancel-pointTransaction.input';
 
 export interface IPointTransactionsServiceFindOneByImpUid {
   impUid: string;
@@ -20,8 +19,7 @@ export interface IPointTransactionsServiceCreate {
 }
 
 export interface IPointTransactionsServiceCreateForPayment {
-  impUid: string;
-  amount: number;
+  createPointTransactionInput: CreatePointTransactionInput;
   user: IAuthUser['user'];
 }
 
@@ -39,6 +37,6 @@ export interface IPointTransactionsServiceCheckHasCancelablePoint {
 }
 
 export interface IPointTransactionsServiceCancel {
-  impUid: string;
+  cancelPointTransactionInput: CancelPointTransactionInput;
   user: IAuthUser['user'];
 }

@@ -1,3 +1,5 @@
+import { CreateProductCategoryInput } from '../dto/create-productCategory.input';
+
 export interface IProductCategoryCreate {
-  name: string;
+  createProductCategoryInput: CreateProductCategoryInput;
 }

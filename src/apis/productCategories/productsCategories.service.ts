@@ -15,7 +15,8 @@ export class ProductCategoriesService {
     return this.productCategoryRepository.find({});
   }
 
-  create({ name }: IProductCategoryCreate): Promise<ProductCategory> {
+  create({ createProductCategoryInput }: IProductCategoryCreate): Promise<ProductCategory> {
+    const { name } = createProductCategoryInput;
     return this.productCategoryRepository.save({ name });
   }
 }
