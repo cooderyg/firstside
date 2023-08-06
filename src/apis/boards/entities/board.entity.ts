@@ -27,14 +27,14 @@ export class Board {
   @Field(() => String)
   contents: string;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at' })
+  @DeleteDateColumn()
   deletedAt: Date;
 }

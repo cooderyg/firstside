@@ -12,6 +12,7 @@ import { FilesModule } from './apis/files/files.module';
 import { FavoritesModule } from './apis/favorites/favorites.module';
 import { ProductReviewsModule } from './apis/productReviews/productReviews.module';
 import { ProductCartsModule } from './apis/productCarts/productCarts.module';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ProductCartsModule } from './apis/productCarts/productCarts.module';
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
+      namingStrategy: new SnakeNamingStrategy(),
     }),
   ],
 })

@@ -40,7 +40,7 @@ export class ProductCart {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'simple-json', name: 'product_infos' })
+  @Column({ type: 'simple-json' })
   @Field(() => [ProductInfo])
   productInfos: ProductInfo[];
 
@@ -48,11 +48,11 @@ export class ProductCart {
   @Field(() => User)
   user: User;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
 }

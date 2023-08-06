@@ -1,13 +1,8 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { IsString, Max, Min } from 'class-validator';
 import { Favorite } from 'src/apis/favorites/entities/favorites.entity';
 import { ProductCart } from 'src/apis/productCarts/entities/productCart.entity';
 import { ProductReview } from 'src/apis/productReviews/entities/productReview.entity';
 import { Store } from 'src/apis/stores/entities/store.entity';
-import {
-  NumberValidator,
-  StringValidator,
-} from 'src/commons/decorators/validate.decorator';
 import {
   Column,
   CreateDateColumn,
@@ -31,32 +26,29 @@ registerEnumType(ROLE, { name: 'ROLE' });
 @ObjectType()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  @StringValidator()
+  @Field(() => String)
   id: string;
 
   @Column()
-  @StringValidator()
+  @Field(() => String)
   email: string;
 
   @Column()
   password: string;
 
   @Column()
-  @StringValidator()
+  @Field(() => String)
   nickname: string;
 
   @Column()
-  @Min(1)
-  @Max(120)
-  @NumberValidator()
+  @Field(() => Int)
   age: number;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   point: number;
 
-  @Column({ nullable: true, name: 'refresh_token' })
-  @IsString()
+  @Column({ nullable: true })
   @Field(() => String, { nullable: true })
   refreshToken: string;
 
@@ -86,14 +78,14 @@ export class User {
   @Field(() => [Favorite])
   favorites: Favorite[];
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at' })
+  @DeleteDateColumn()
   deletedAt: Date;
 }

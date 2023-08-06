@@ -21,15 +21,15 @@ export class ChatMessage {
   @Field(() => String)
   message: string;
 
-  @Column({ name: 'is_seller' })
+  @Column()
   @Field(() => Boolean)
   isSeller: boolean;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
 

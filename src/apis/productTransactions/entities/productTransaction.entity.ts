@@ -35,16 +35,16 @@ export class ProductTransaction {
   @NumberValidator()
   amount: number;
 
-  @Column({ name: 'point_amount' })
+  @Column()
   @NumberValidator()
   pointAmount: number;
 
-  @Column({ nullable: true, name: 'imp_uid' }) // 포인트로만 결제일 때에는 null
+  @Column({ nullable: true }) // 포인트로만 결제일 때에는 null
   @IsString()
   @Field(() => String, { nullable: true })
   impUid: string;
 
-  @Column({ type: 'simple-json', name: 'product_infos' })
+  @Column({ type: 'simple-json' })
   @IsArray()
   @Field(() => [ProductInfo])
   productInfos: ProductInfo[];
@@ -62,11 +62,11 @@ export class ProductTransaction {
   @Field(() => User)
   user: User;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
 }

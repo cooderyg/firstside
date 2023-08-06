@@ -1,18 +1,21 @@
-import { Field, InputType, Int, PickType } from '@nestjs/graphql';
-import { ProductTransaction } from '../entities/productTransaction.entity';
-import { StringValidator } from 'src/commons/decorators/validate.decorator';
-import { IsString } from 'class-validator';
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { NumberValidator, StringValidator } from 'src/commons/decorators/validate.decorator';
+import { IsArray, IsString } from 'class-validator';
 
 @InputType()
-export class CreateProductTransactionInput extends PickType(ProductTransaction, [
-  'amount',
-  'pointAmount',
-]) {
+export class CreateProductTransactionInput {
+  @IsArray()
   @Field(() => [ProductInfoInput])
   productInfos: ProductInfoInput[];
 
   @StringValidator()
   storeId: string;
+
+  @NumberValidator()
+  amount: number;
+
+  @NumberValidator()
+  pointAmount: number;
 
   @IsString()
   @Field(() => String, { nullable: true })

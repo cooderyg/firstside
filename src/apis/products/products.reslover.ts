@@ -42,6 +42,7 @@ export class ProductsResolver {
   createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ): Promise<Product> {
+    console.log(createProductInput);
     return this.productsService.create({ createProductInput });
   }
 

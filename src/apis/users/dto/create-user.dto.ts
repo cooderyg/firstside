@@ -1,12 +1,28 @@
-import { Field, InputType, Int, PickType } from '@nestjs/graphql';
-import { User } from '../entities/user.entity';
-import { IsNumber, Max, Min } from 'class-validator';
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { IsEnum, IsNumber, Max, Min } from 'class-validator';
+import { StringValidator } from 'src/commons/decorators/validate.decorator';
+import { ROLE } from '../entities/user.entity';
 
 @InputType()
-export class CreateUserInput extends PickType(User, ['email', 'password', 'nickname']) {
+export class CreateUserInput {
+  @StringValidator()
+  email: string;
+
+  @StringValidator()
+  password: string;
+
+  @StringValidator()
+  nickname: string;
+
   @IsNumber()
   @Min(1)
   @Max(120)
   @Field(() => Int)
   age: number;
+
+  @IsEnum(ROLE)
+  @Field(() => ROLE)
+  role: ROLE;
 }
+
+// extends PickType(User, ['email', 'password', 'nickname'])

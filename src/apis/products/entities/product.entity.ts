@@ -40,7 +40,6 @@ export class Product {
   @Field(() => String)
   name: string;
 
-  @Min(1)
   @Column()
   @Field(() => Int)
   price: number;
@@ -54,7 +53,7 @@ export class Product {
   stock: Stock[];
 
   @Min(0)
-  @Column({ default: 0, name: 'favorite_count' })
+  @Column({ default: 0 })
   @Field(() => Int)
   favoriteCount: number;
 
@@ -80,14 +79,14 @@ export class Product {
   @Field(() => [Favorite])
   favorites: Favorite[];
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at' }) // 소프트삭제 graphql로는 boolean 값만 받음
+  @DeleteDateColumn() // 소프트삭제 graphql로는 boolean 값만 받음
   deletedAt: Date;
 }
