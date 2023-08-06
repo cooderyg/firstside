@@ -54,11 +54,9 @@ export class ProductsService {
   }
 
   // 제품등록
-  async create({
-    createProductInput,
-  }: IProductsServiceCreate): Promise<Product> {
+  async create({ createProductInput }: IProductsServiceCreate): Promise<Product> {
     const { productCategoryId, imageUrls, ...product } = createProductInput;
-
+    console.log(product);
     const result = await this.productsRepository.save({
       ...product,
       productCategory: {

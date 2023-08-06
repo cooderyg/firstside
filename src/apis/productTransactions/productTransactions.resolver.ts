@@ -22,9 +22,9 @@ export class ProductTransactionsResolver {
     @Args('createProductTransactionInput')
     createProductTransactionInput: CreateProductTransactionInput,
     @Context() context: IContext,
-  ) {
+  ): Promise<ProductTransaction> {
     const userId = context.req.user.id;
-    this.productTransactionsService.createProductTransaction({
+    return this.productTransactionsService.createProductTransaction({
       createProductTransactionInput,
       userId,
     });

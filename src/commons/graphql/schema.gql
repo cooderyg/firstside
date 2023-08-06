@@ -50,6 +50,8 @@ type Store {
   name: String!
   user: User!
   products: [Product!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type User {
@@ -195,7 +197,11 @@ type Mutation {
 }
 
 input CreateUserInput {
+  email: String!
+  password: String!
+  nickname: String!
   age: Int!
+  role: ROLE!
 }
 
 input CreateBoardInput {
@@ -218,7 +224,15 @@ input CreateProductInput {
   description: String!
   price: Int!
   productCategoryId: String!
+  storeId: String!
   imageUrls: [String!]!
+  stock: [StockInput!]!
+}
+
+input StockInput {
+  color: String!
+  size: String!
+  quantity: Int!
 }
 
 input UpdateProductCartInput {
@@ -246,6 +260,8 @@ input CreateProductReviewInput {
 input CreateProductTransactionInput {
   productInfos: [ProductInfoInput!]!
   storeId: String!
+  amount: Int!
+  pointAmount: Int!
   impUid: String
 }
 
