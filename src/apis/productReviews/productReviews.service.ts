@@ -1,7 +1,12 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductReview } from './entities/productReview.entity';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import {
   IProductReviewsServiceCountByProduct,
   IProductReviewsServiceCountByUser,
@@ -11,12 +16,14 @@ import {
   IProductReviewsServiceFindByProductId,
   IProductReviewsServiceFindByUserId,
 } from './interfaces/productReview-service.interface';
+import { ProductTransactionsService } from '../productTransactions/productTransactions.service';
 
 @Injectable()
 export class ProductReviewsService {
   constructor(
     @InjectRepository(ProductReview)
     private readonly productReviewsRepository: Repository<ProductReview>,
+    private readonly productTransactionsService: ProductTransactionsService,
   ) {}
 
   //조회 (리뷰 제품별 페이지네이션)
@@ -67,14 +74,35 @@ export class ProductReviewsService {
     createProductReviewInput,
     userId,
   }: IProductReviewsServiceCreate): Promise<ProductReview> {
-    const { contents, score, productId } = createProductReviewInput;
-    // 1. 결제테이블 만들면 일대일 관계만들고 결제내역자체로 확인해서 해당 유저가 리뷰작성 가능한지 검증하기
+    const { contents, score, productInfo, productTransactionId } = createProductReviewInput;
+    // 1. 결제테이블 결제내역자체로 확인해서 해당 유저가 리뷰작성 가능한지 검증하기
+    const productTransaction = await this.productTransactionsService.findById({
+      id: productTransactionId,
+    });
+    const foundInfos = productTransaction.productInfos;
+    let InfoIndex: number;
+    const filteredInfo = foundInfos.map((foundInfo, index) => {
+      if (
+        foundInfo.productId === productInfo.productId &&
+        foundInfo.color === productInfo.color &&
+        foundInfo.size === productInfo.size
+      ) {
+        InfoIndex = index;
+        return foundInfo;
+      }
+    });
+    if (!filteredInfo.length)
+      throw new NotFoundException('해당하는 주문이 없거나 상품정보가 잘못되었습니다.');
+    if (filteredInfo[0].isReviewed)
+      throw new ConflictException('이미 리뷰가 작성된 주문제품입니다.');
 
+    productTransaction.productInfos[InfoIndex].isReviewed = true;
+    await this.productTransactionsService.updateReviewed({ productTransaction });
     // 2. 생성
     return await this.productReviewsRepository.save({
       contents,
       score,
-      product: { id: productId },
+      product: { id: productInfo.productId },
       user: { id: userId },
     });
   }

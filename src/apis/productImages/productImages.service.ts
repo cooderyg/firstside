@@ -19,18 +19,14 @@ export class ProductImagesService {
     imageUrls.forEach((imageUrl) => {
       const productImage = this.productImagesRepository.create({
         url: imageUrl,
-        product: {
-          id: productId,
-        },
+        product: { id: productId },
       });
       temp.push(productImage);
     });
     await this.productImagesRepository.insert(temp);
   }
 
-  async delete({
-    productImageId,
-  }: IProdcutImagesServiceDelete): Promise<boolean> {
+  async delete({ productImageId }: IProdcutImagesServiceDelete): Promise<boolean> {
     const result = await this.productImagesRepository.softDelete({
       id: productImageId,
     });

@@ -7,11 +7,8 @@ import { UsersModule } from '../users/users.module';
 import { StoresModule } from '../stores/stores.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([ProductTransaction]),
-    UsersModule,
-    StoresModule,
-  ],
+  imports: [TypeOrmModule.forFeature([ProductTransaction]), UsersModule, StoresModule],
   providers: [ProductTransactionsResolver, ProductTransactionsService],
+  exports: [ProductTransactionsService],
 })
 export class ProductTransactionsModule {}

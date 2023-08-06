@@ -10,6 +10,7 @@ import { StoresService } from '../stores/stores.service';
 import {
   ICreateProductTransaction,
   IProductTransactionsServiceUpdateStatus,
+  IProductTransctionsServiceUpdateReviewed,
 } from './interfaces/productTransaction-service.interface';
 
 @Injectable()
@@ -80,6 +81,14 @@ export class ProductTransactionsService {
     return await this.productTransactionsRepository.save({
       id,
       status,
+    });
+  }
+
+  async updateReviewed({
+    productTransaction,
+  }: IProductTransctionsServiceUpdateReviewed): Promise<void> {
+    await this.productTransactionsRepository.save({
+      ...productTransaction,
     });
   }
 }
