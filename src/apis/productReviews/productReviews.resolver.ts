@@ -5,6 +5,9 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
 import { IContext } from 'src/commons/interfaces/context';
 import { CreateProductReviewInput } from './dto/create-productReview.input';
+import { RolesGuard } from '../auth/guard/roles.guard';
+import { HasRoles } from '../auth/decorators/roles.decorator';
+import { ROLE } from '../users/entities/user.entity';
 
 @Resolver()
 export class ProductReviewsResolver {
@@ -32,23 +35,20 @@ export class ProductReviewsResolver {
   }
   // 제품별 리뷰갯수 조회
   @Query(() => Int)
-  fetchProductReviewsCountByProduct(
-    @Args('productId') productId: string,
-  ): Promise<number> {
+  fetchProductReviewsCountByProduct(@Args('productId') productId: string): Promise<number> {
     return this.productReviewsService.countByProduct({ productId });
   }
 
   // 유저별 리뷰갯수 조회
   @Query(() => Int)
-  fetchProductReviewsCountByUser(
-    @Context() context: IContext,
-  ): Promise<number> {
+  fetchProductReviewsCountByUser(@Context() context: IContext): Promise<number> {
     const userId = context.req.user.id;
     return this.productReviewsService.countByUser({ userId });
   }
 
   //-------------------------- 생성 --------------------------//
-  @UseGuards(GqlAuthGuard('access'))
+  @HasRoles(ROLE.USER)
+  @UseGuards(GqlAuthGuard('access'), RolesGuard)
   @Mutation(() => ProductReview)
   createProductReview(
     @Context() context: IContext,
