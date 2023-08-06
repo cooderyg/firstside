@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductCategory } from './entities/productCategory.entity';
-import { ProductCategoriesResolver } from './productsCategories.resolver';
-import { ProductCategoriesService } from './productsCategories.service';
+import { ProductCategoriesResolver } from './productCategories.resolver';
+import { ProductCategoriesService } from './productCategories.service';
 
 @Module({
   imports: [
